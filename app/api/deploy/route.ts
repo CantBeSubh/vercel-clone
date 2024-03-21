@@ -12,8 +12,10 @@ export const POST = async (request: NextRequest) => {
     if (!repoUrl) return new NextResponse(JSON.stringify({ message: "Missing repoUrl" }), { status: 400 });
     try {
         const id = uuidv4();
-        await simpleGit().clone(repoUrl, `/repos/${id}`);
+        const CURRENT_DIR = process.cwd();
+        await simpleGit().clone(repoUrl, `${CURRENT_DIR}/repos/${id}`);
     } catch (e) {
+        console.log(e);
         return new NextResponse(JSON.stringify({ message: "Error cloning repo" }), { status: 500 });
     }
     return new NextResponse(JSON.stringify({ message: "Hello World", body }));
